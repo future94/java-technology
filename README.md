@@ -10,5 +10,8 @@
 ### 数据库
 *   [MySQL](database/mysql/README.md)
 
+### 消息队列
+*   [RabbitMQ](mq/rabbitmq/README.md)
+
 ### 实际案例
 *   [每日百万订单技术方案](case/big-table/README.md)
