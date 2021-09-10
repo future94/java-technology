@@ -3,7 +3,7 @@
 
 RabbitMQ 整体上是一个生产者与消费者模型，主要负责接收、存储和转发消息。RabbitMQ 模型更像是一种交换机模型。
 
-![image.png](images/96388546.png)
+![image.png](https://raw.githubusercontent.com/future94/java-technology/master/mq/rabbitmq/images/96388546.png)
 
 生产者的消息不会直接发送到Queue上，而是先发送到Exchange，经过Exchange转到符合条件的Queue上。生产者发送数据的时候要携带一个Routing Key，Queue绑定到Exchange的时候应该绑定一个Bingding Key。消息通过Routing Key与Binding Key匹配规则找出对应的Queue，并发送给消费者。
 
@@ -30,7 +30,7 @@ direct(默认)，fanout, topic, 和 headers.
 
 Queue绑定到Exchange的时候需要设置一个Binding Key，生产者投递消息的时候需要传递一个Routing Key，如果这两个值完全相等，则发送到绑定这个Exchange下面的所有Queue。
 
-![image.png](images/6a7067.png)
+![image.png](https://raw.githubusercontent.com/future94/java-technology/master/mq/rabbitmq/images/6a7067.png)
 
 如上图，Exchange类型为direct，Routing Key为warning会发送到Queue1和Queue2，Routing Key为info和dubug被发送到Queue2。
 
@@ -43,7 +43,7 @@ direct严格的匹配方式在很多情况下不能满足实际业务的需求�
 - 用符号"."对Routing Key和Bingding Key词语进行分割。如：com.rabbitmq.client，这就是3个词。
 - Bingding Key有两个特殊字符，`*`和`#`用于做模糊匹配，其中`*`用于匹配一个单词，`#`用于匹配多个单词(可以是零个)。
 
-![image.png](images/231232131.png)
+![image.png](https://raw.githubusercontent.com/future94/java-technology/master/mq/rabbitmq/images/231232131.png)
 
 - 路由键为 `com.rabbitmq.client` 的消息会路由到Queue1与Queue2。
 - 路由键为 `com.hidden.client` 的消息会路由到Queue2。
@@ -55,7 +55,7 @@ direct严格的匹配方式在很多情况下不能满足实际业务的需求�
 
 headers 传输时是以键值对的形式，headers交换器不依赖于路由键的匹配规则来路由消息，而是**根据发送的消息内容中的 headers 属性进行匹配**。在绑定队列和交换器时指定一组键值对，当发送消息到交换器时，RabbitMQ会获取到该消息的 headers（也是一个键值对的形式)，**对比其中的headers键值对是否完全匹配队列和交换器绑定时指定的键值对，如果完全匹配则消息会路由到该队列，否则不会路由到该队列**。headers 类型的交换器性能会很差，而且也不实用，基本上不会看到它的存在。
 
-![image.png](images/20160820184114896.png)
+![image.png](https://raw.githubusercontent.com/future94/java-technology/master/mq/rabbitmq/images/20160820184114896.png)
 
 如上图：Headers的键值对完全匹配的是key1与value1，所以路由到Queue1.
 
@@ -76,7 +76,7 @@ headers 传输时是以键值对的形式，headers交换器不依赖于路由�
 
 下图展示了生产者将消息存入 RabbitMQ Broker,以及消费者从Broker中消费数据的整个流程。
 
-![消息队列的运转过程](images/423412.png)
+![消息队列的运转过程](https://raw.githubusercontent.com/future94/java-technology/master/mq/rabbitmq/images/423412.png)
 
 
 参考链接：
