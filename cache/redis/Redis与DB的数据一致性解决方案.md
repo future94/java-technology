@@ -13,10 +13,10 @@
 ### 2.1 旁路缓存模式
 
 读数据：
-![image](20210522212436746.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/cache/redis/images/20210522212436746.png)
 
 写数据：
-![image](20210522212625984.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/cache/redis/images/20210522212625984.png)
 
 **为什么是先更新DB在删除Cache？**  
 
