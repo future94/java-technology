@@ -12,11 +12,11 @@ Raft是一种管理复制日志的一致性算法。通过一切以领导者为�
 
 刚开始创建的节点都是follower，term都是0。每个server启动的时候都有一个选举超时延迟，这个选举超时延迟是随机生成的处于某一范围内的值，因此该延迟短的server先发起竞选——变为candidate,term+1,向其他server发送请求投票RPC，因为其最先发起竞选，term最大，因此能被选为leader。
 
-![image](312312123.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/312312123.png)
 
 比如 A 节点等待超时的时间间隔 150 ms，B 节点 200 ms，C 节点 300 ms。那么 a 先超时，最先因为没有等到领导者的心跳信息，发生超时。如下图所示，三个节点的超时计时器开始运行。
 
-![image](2312312312321.gif)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/2312312312321.gif)
 
 ## 3. 发起投票
 
@@ -37,7 +37,7 @@ Raft是一种管理复制日志的一致性算法。通过一切以领导者为�
 	- 如果A收到收到其他节点为leader生命消息的term比自己还小，自己还会保持candidate；否则转为follower。
 
 
-![image](4312321321.gif)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/4312321321.gif)
 
 ## 4. 任期
 
@@ -65,17 +65,17 @@ Raft是一种管理复制日志的一致性算法。通过一切以领导者为�
 - A服务器挂了，不能投票，所以B一共收到了2票（自己一票，B一票）。自己变为leader。
 - 节点 C 向节点 A 和 B 发送心跳信息，节点 B 响应心跳信息，节点 A 不响应心跳信息。
 
-![image](3123213151257.gif)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/3123213151257.gif)
 
 ## 7. Raft日志复制
 
 每个leader收到请求后，执行指令操作，并且携带日志索引和term并行发送所有的followers，每次follower收到消息后，如果可以和leader的对应上，则追加到后面，<font color="red">如果不一致，raft是通过跟随者强制复制领导者的日志来保证的</font>。
 
-![image](789423412.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/789423412.png)
 
 如下面不一致的情况。a、b会同步日志；c、d会丢弃日志；e、f会覆盖修正日志（如何覆盖下面会说）。
 
-![image](31231255.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/31231255.png)
 
 ## 8. leader如何覆盖follower日志
 
@@ -97,23 +97,23 @@ Raft是一种管理复制日志的一致性算法。通过一切以领导者为�
 
 一开始，Leader 和 两个 Follower 都没有任何数据。
 
-![image](63424123.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/63424123.png)
 
 客户端发送请求给 Leader，储存数据 “sally”，Leader 先将数据写在本地日志，这时候数据还是 Uncommitted (还没最终确认，红色表示)
 
-![image](g3412412.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/g3412412.png)
 
 Leader 给两个 Follower 发送 AppendEntries 请求，数据在 Follower 上没有冲突，则将数据暂时写在本地日志，Follower 的数据也还是 Uncommitted。
 
-![image](g3r2123213.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/g3r2123213.png)
 
 Follower 将数据写到本地后，返回 OK。Leader 收到后成功返回，只要收到的成功的返回数量超过半数 (包含Leader)，Leader 将数据 “sally” 的状态改成 Committed。( 这个时候 Leader 就可以返回给客户端了)
 
-![image](fw24231.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/fw24231.png)
 
 Leader 再次给 Follower 发送 AppendEntries 请求，收到请求后，Follower 将本地日志里 Uncommitted 数据改成 Committed。这样就完成了一整个复制日志的过程，三个节点的数据是一致的.
 
-![image](d21ijio312.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/d21ijio312.png)
 
 ### 10.2 异常情况
 
@@ -121,43 +121,43 @@ Leader 再次给 Follower 发送 AppendEntries 请求，收到请求后，Follow
 
 一开始有 5 个节点处于同一网络状态下。
 
-![image](dqwhui123.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/dqwhui123.png)
 
 将节点分成两边，一边有两个节点，一边三个节点。
 
-![image](dsadhauhi213.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/dsadhauhi213.png)
 
 两个节点这边已经有 Leader 了，来自客户端的数据 “bob” 通过 Leader 同步到 Follower。
 
-![image](dash123739.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/dash123739.png)
 
 因为只有两个节点，少于3个节点，所以 “bob” 的状态仍是 Uncommitted。所以在这里，服务器会返回错误给客户端
 
-![image](su2j5ks.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/su2j5ks.png)
 
 另外一个 Partition 有三个节点，进行重新选主。客户端数据 “tom” 发到新的 Leader，通过和上节网络状态下相似的过程，同步到另外两个 Follower。
 
-![image](dajjio123.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/dajjio123.png)
 
 因为这个 Partition 有3个节点，超过半数，所以数据 “tom” 都 Commit 了。
 
-![image](3123121fsdf.jpg)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/3123121fsdf.jpg)
 
 网络状态恢复，5个节点再次处于同一个网络状态下。但是这里出现了数据冲突 “bob" 和 “tom"
 
-![image](1dasdjui123.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/1dasdjui123.png)
 
 三个节点的 Leader 广播 AppendEntries
 
-![image](y78hnjl.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/y78hnjl.png)
 
 两个节点 Partition 的 Leader 自动降级为 Follower，因为这个 Partition 的数据 “bob” 没有 Commit，返回给客户端的是错误，客户端知道请求没有成功，所以 Follower 在收到 AppendEntries 请求时，可以把 “bob“ 删除，然后同步 ”tom”，通过这么一个过程，就完成了在 Network Partition 情况下的复制日志，保证了数据的一致性。
 
-![image](miojou98j.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/miojou98j.png)
 
 最终状态
 
-![image](mklm23.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/mklm23.png)
 
 
 参考文章：
