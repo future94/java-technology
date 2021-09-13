@@ -80,6 +80,39 @@ Write Behind Pattern 下 DB 的写性能非常高，非常适合一些数据经�
 
 ![image](https://raw.githubusercontent.com/future94/java-technology/master/cache/redis/images/1232131231.png)
 
+## 4. 二级缓存的数据一致性
+
+- 一级缓存：即本地缓存，存储在JVM中，如Guava、Map等等。
+- 二级缓存：即集中缓存，存储在其他服务，如Redis、Memecache等。
+
+### 4.1 一级缓存
+
+优点：直接在JVM中，没有网络开销，速度非常快。
+缺点：只能被自己访问，重启后丢失，占用JVM内存空间。
+
+### 4.2 二级缓存
+
+优点：在其他服务，多个服务可共用，不占用JVM内存。
+缺点：有网络开销。
+
+### 4.3 数据一致性
+
+一级缓存与二级缓存也需要与DB做数据一致性。实现方式也差不多，利用Canal监听数据变化或者代码中维护，并利用MQ的订阅发布异步处理。更新一级缓存与二级缓存，并保证消息的最终一致性，如果需要强一致可以加分布式锁同步。
+
+![image](https://raw.githubusercontent.com/future94/java-technology/master/cache/redis/images/20210605172721406.png)
+
+## 5. 三级缓存的数据一致性
+
+### 5.1 三级缓存
+
+使用Nginx Lua共享字典作为L3本地缓存。每次请求过来，优先从nginx本地缓存中提取各种数据（这里nginx+lua脚本做页面动态生成的工作），结合页面模板，生成需要的页面。
+
+### 5.2 数据一致性
+
+三级缓存一般会用在超大流量的时候如秒杀场景缓存页面，一般设置热点数据永远不过期，通过 ngx.shared.DICT的缓存的LRU机制去淘汰。页面一般不会变化，如有变化也应该通知一级二级三级缓存进行更新变化。
+
+**本人接触很少，欢迎大家提供完整的三级缓存方案及源码。**
+
 参考文章：
 - [3种常用的缓存读写策略](https://github.com/Snailclimb/JavaGuide/blob/master/docs/database/Redis/3%E7%A7%8D%E5%B8%B8%E7%94%A8%E7%9A%84%E7%BC%93%E5%AD%98%E8%AF%BB%E5%86%99%E7%AD%96%E7%95%A5.md)
 - [Redis与DB的数据一致性解决方案（史上最全）](https://www.cnblogs.com/crazymakercircle/p/14853622.html)
