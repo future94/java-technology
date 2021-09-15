@@ -115,7 +115,7 @@ Leader 再次给 Follower 发送 AppendEntries 请求，收到请求后，Follow
 
 ![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/d21ijio312.png)
 
-### 10.2 异常情况
+### 10.2 分区异常情况
 
 部分节点之间没办法互相通信，Raft 也能保证在这种情况下数据的一致性。
 
@@ -160,8 +160,46 @@ Leader 再次给 Follower 发送 AppendEntries 请求，收到请求后，Follow
 ![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/mklm23.png)
 
 
+### 10.3 未知状态
+
+写入的状态：成功、失败、未知。
+
+**未知但最后成功的情况：**
+
+如果有5个节点，其中挂了3个。S5是leader，S1是Slave，S2、S3、S4挂掉了，这时候term为3，向leaderS5写入数据3。这时候S1、S5的数据3状态都是uncommitted，因为没有达到多数派。如下图：
+
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/vjiu1239jai2.png)
+
+这时候S2、S3、S4上线，leader S5发送未提交的数据3给S2、S3、S4会写入成功，最终数据会写入成功。
+
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/j9821ehjb.png)
+
+**未知但最后失败的情况：**
+
+如果有5个节点，其中挂了3个。S5是leader，S1是Slave，S2、S3、S4挂掉了，这时候term为3，再次向leaderS5写入数据3。这时候S1、S5的数据3状态都是uncommitted，因为没有达到多数派。如下图：
+
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/jo872312jklws.png)
+
+这时候如果S5、S1挂了，S2、S3、S4好了，会重新出发选举。
+
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/dasjoi2429310ujo.png)
+
+假设S4先超时，触发选举并当选term4号leader。
+
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/djaijo1230gfc8.png)
+
+这时候我们向S4 leader写入数据4，因为达到多数派同步，所以数据4最后写入成功。
+
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/dasml21329iods.png)
+
+这时候我们S1、S5恢复上线，他们的term为3，因为这时候term最大已经为4了，S5发送的消息会被其他拒绝（因为term太小），而S4告诉S5自己已经是term4的leader了，所以S5变为slave。由于数据强制以leader为准，所以S5、S1的uncommitted数据3最终会被清除，如下图：
+
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/daji122390jjnxkm.png)
+
+
 参考文章：
 - [raft动画掩饰](http://thesecretlivesofdata.com/raft/)
+- [raft官网各种情况动画](https://raft.github.io/)
 - [共识算法：Raft](https://www.jianshu.com/p/8e4bbe7e276c)
 - [raft图解(秒懂)](https://www.cnblogs.com/crazymakercircle/p/14343154.htm)
 
