@@ -65,7 +65,7 @@ Proposer接收Client的请求，然后发送给Acceptor，达成共识后传输�
 - 通过leader的模式解决活锁问题。
 - 已经有leader了，所以不会进行提案的投票过程。
 
-[Raft算法](Raft算法详解.md)就是Multi Paxos的变种实现。
+[Raft算法](Raft算法详解.md)、[Zab协议](Zab协议详解.md)就是Multi Paxos的变种实现。
 
 ## 5. Fast Paxos
 
