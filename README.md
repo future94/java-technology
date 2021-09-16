@@ -8,6 +8,7 @@
 *   [一致性Hash算法原理与实现](algorithm/一致性Hash算法原理与实现.md)
 *   [Paxos算法详解](algorithm/Paxos算法详解.md)
 *   [Raft算法详解](algorithm/Raft算法详解.md)
+*   [Zab算法详解.md](algorithm/Zab算法详解.md)
 
 ### Spring
 *   [Spring](spring/spring/README.md)
