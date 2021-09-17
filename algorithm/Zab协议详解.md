@@ -112,3 +112,8 @@ Zab与2PC不同点在于<font color="red">Zab在广播消息时不需要等待�
 Leader 服务器与每一个 Follower 服务器之间都维护了一个单独的 FIFO 消息队列进行收发消息，使用队列消息可以做到异步解耦。 Leader 和 Follower 之间只需要往队列中发消息即可。如果使用同步的方式会引起阻塞，性能要下降很多。
 
 ![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/1053629-447433fdf7a1d7d6.png)
+
+
+参考文章：
+- [Zab协议 (史上最全)](https://www.cnblogs.com/crazymakercircle/p/14339702.html)
+- [ZAB协议概述与选主流程详解](https://blog.csdn.net/a724888/article/details/80757503)
