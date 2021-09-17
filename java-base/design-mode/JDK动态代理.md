@@ -3,7 +3,7 @@
 
 代理是一种常用的设计模式，其目的就是为其他对象提供一个代理以控制对某个对象的访问。`代理类可以对委托类调用前做特殊处理，调用委托类的实现，以及委托类调用后做特殊处理`。
 
-![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/java/images/20200811203201180.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/design-mode/images/20200811203201180.png)
 
 好处：可以在不改变原有类的基础上对其增强或控制他的执行等，如Spring Aop。
 
