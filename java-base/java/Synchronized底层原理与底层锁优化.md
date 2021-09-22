@@ -109,6 +109,8 @@ ObjectMonitor () {
 3. 当running状态线程调用wait()方法，释放当前线程的monitor对，并进入waiting状态。**_owner变为NULL，_count减1，将线程加入都_WaitSet队列中，当有线程notify()该线程时，将该线程加入到_EntryList队列中参与锁的竞争** 。
 4. 当线程执行完成时，**释放monitor对象，\_owner为NULL，_count减1** 。
 
+更多详细请看[JVM底层又是如何实现synchronized的](https://www.open-open.com/lib/view/open1352431526366.html)
+
 ### 3.2 synchronized方法
 
 方法头部使用的是 ACC_SYNCHRONIZED 标识，该标识指明了该方法是一个同步方法，JVM 通过该 ACC_SYNCHRONIZED 访问标志来辨别一个方法是否声明为同步方法，从而执行相应的同步调用。
@@ -207,7 +209,7 @@ public void method2() {
 
 | 对比项 | synchronized | lock |
 ---|---|---
-实现层面 | JVM ｜ JUC
+实现层面 | JVM | JUC
 锁释放 | jvm执行完或者异常会自动释放 | 手动调用unlock方法释放
 锁获取 | 无限等待 | 提供多种方式获取锁
 锁状态 | 获取不到 | 可获取
