@@ -57,11 +57,11 @@ public class SynchronizedDemo {
 
 synchronized代码块：  
 
-![file](https://static.phpisfuture.com/futureblog/article/20200229174919747.png)
+![file](https://raw.githubusercontent.com/future94/java-technology/master/java-base/java/images/20200229174919747.png)
 
 synchronized方法：  
 
-![file](https://static.phpisfuture.com/futureblog/article/20200229174941356.png)
+![file](https://raw.githubusercontent.com/future94/java-technology/master/java-base/java/images/20200229174941356.png)
 
 ### 3.1 synchronized代码块
 
