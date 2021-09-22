@@ -24,6 +24,9 @@
 ### 缓存
 *   [Redis](cache/redis/README.md)
 
+### 微服务
+*   [Dubbo](microservice/dubbo/README.md)
+
 ### 实际案例
 *   [每日百万订单技术方案](case/big-table/README.md)
 *   [秒杀系统技术方案](case/seckill/README.md)

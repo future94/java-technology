@@ -35,7 +35,7 @@ future.addCallback(
 
 我们知道消息在被追加到 Partition(分区)的时候都会分配一个特定的偏移量（offset）。偏移量（offset)表示 Consumer 当前消费到的 Partition(分区)的所在的位置。Kafka 通过偏移量（offset）可以保证消息在分区内的顺序性。如下图：
 
-![image](719892-20180627205608005-146856169.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/mq/kafka/images/719892-20180627205608005-146856169.png)
 
 当消费者获取到消息的时候，会自动提交Offset(`enable.auto.commit=true`)，如果这时候消费者还没有来的及消息就挂了，那么就提交了Offset但是还没有消费。所以我们可以简单粗暴的关闭自动提交Offset功能，当消息完成消费后在手动提交Offset。这样也会有问题，当我们消息处理完成，还没有提交Offset的时候挂了，这样就会出现重复消费的情况，所以我们要做幂等处理，防止重复消费。[Kafka如何保证消息不重复消费](Kafka如何保证消息不重复消费.md)
 
