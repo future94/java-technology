@@ -1,7 +1,8 @@
 记录一些java知识点与优秀的文章
 
 ### Java基础
-*   [java](java-base/java/README.md)
+*   [Java](java-base/java/README.md)
+*   [JVM](java-base/jvm/README.md)
 *   [设计模式](java-base/design-mode/README.md)
 
 ### 算法

@@ -22,7 +22,7 @@
 
 可达性分析法（Reachability Analysis）：这个算法的基本思想就是通过一系列的称为 **“GC Roots”** 的对象作为起点，从这些节点开始向下搜索，节点所走过的路径称为引用链，当一个对象到 GC Roots 没有任何引用链相连的话（图中就是从GC Roots到这个对象[objeact5、objeact6、objeact7]不可达），则证明此对象是不可用的。
 
-![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/java/images/20200827165419590.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/jvm/images/20200827165419590.png)
 
 GC Roots 的节点主要是**在全局性的引用（如常量或者类静态属性）**与**执行上下文（如栈帧中的本地变量表）**中。
 
@@ -99,7 +99,7 @@ JDK1.2 以后，Java 对引用的概念进行了扩充，将引用分为强引�
 1. **效率问题：** 标记和清除两个过程效率都不高。
 2. **空间问题：** 标记清除后会产生大量不连续的碎片，当有大对象需要分配时不得不触发另一次垃圾收集动作。
 
-![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/java/images/20200827172445422.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/jvm/images/20200827172445422.png)
 
 ### 2.2 复制算法
 
@@ -112,13 +112,13 @@ JDK1.2 以后，Java 对引用的概念进行了扩充，将引用分为强引�
 
 当Survivor空间不足时，会进行[JVM内存分配担保机制](JVM内存分配担保机制.md)。
 
-![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/java/images/20200827173039776.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/jvm/images/20200827173039776.png)
 
 ### 2.3 标记 - 整理算法
 
 复制收集算法在对象存活率较高时就要进行较多的复制操作，效率比较低，而且如果不想浪费空间，就需要有额外空间担保，老年代没人担保，根据老年代的特点提出的一种标记算法，标记过程仍然与“标记-清除”算法一样，但后续步骤不是直接对可回收对象回收，而是让所有存活的对象向一端移动，然后直接清理掉端边界以外的内存。
 
-![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/java/images/20200827174344492.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/jvm/images/20200827174344492.png)
 
 ### 2.4 分代收集算法
 
@@ -141,7 +141,7 @@ GC Roots 的节点主要是**在全局性的引用（如常量或者类静态属
 
 > OopMap{ ebx=Oop [16]=Oop oof=142 }
 
-![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/java/images/20200828142148537.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/jvm/images/20200828142148537.png)
 
 ### 3.2 安全点（Safepoint）
 
@@ -168,19 +168,19 @@ GC让所有线程（不包括JNI[Java Native Interface]线程）都跑到安全�
 
 ## 4 垃圾收集器
 
-![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/java/images/20200831095818762.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/jvm/images/20200831095818762.png)
 
 ### 4.1 Serial 收集器
 
 Serial（串行）收集器收集器是最基本、历史最悠久的垃圾收集器了。大家看名字就知道这个收集器是一个单线程收集器了。它的 **“单线程”** 的意义不仅仅意味着它只会使用一条垃圾收集线程去完成垃圾收集工作，更重要的是它在进行垃圾收集工作的时候必须暂停其他所有的工作线程（ **"Stop The World"** ），直到它收集结束。它**简单而高效（与其他收集器的单线程相比）**。Serial 收集器由于没有线程交互的开销，自然可以获得很高的单线程收集效率。Serial 收集器对于运行在 Client 模式下的虚拟机来说是个不错的选择。
 
-![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/java/images/20200828170010020.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/jvm/images/20200828170010020.png)
 
 ### 4.2 ParNew 收集器
 
 **ParNew 收集器其实就是 Serial 收集器的多线程版本，除了使用多线程进行垃圾收集外，其余行为（控制参数、收集算法、回收策略等等）和 Serial 收集器完全一样。**
 
-![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/java/images/20200828170140310.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/jvm/images/20200828170140310.png)
 
 它是许多运行在 Server 模式下的虚拟机的首要选择，除了 Serial 收集器外，只有它能与 CMS 收集器（真正意义上的并发收集器，后面会介绍到）配合工作。
 
@@ -219,7 +219,7 @@ Parallel Scavenge 收集器提供了很多参数供用户找到最合适的停�
 - **重新标记：** 重新标记阶段就是为了修正并发标记期间因为用户程序继续运行而导致标记产生变动的那一部分对象的标记记录，这个阶段的停顿时间一般会比初始标记阶段的时间稍长，远远比并发标记阶段时间短
 - **并发清除：** 开启用户线程，同时 GC 线程开始对为标记的区域做清扫。
 
-![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/java/images/20200828170846988.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/jvm/images/20200828170846988.png)
 
 `优点`：**并发收集、低停顿**。
 
@@ -279,7 +279,7 @@ public class GCTest {
 
 运行结果 (红色字体描述有误，应该是对应于 JDK1.7 的永久代)：
 
-![image.png](https://raw.githubusercontent.com/future94/java-technology/master/java-base/java/images/31231231231.png)
+![image.png](https://raw.githubusercontent.com/future94/java-technology/master/java-base/jvm/images/31231231231.png)
 
 从上图我们可以看出 eden 区内存几乎已经被分配完全（即使程序什么也不做，新生代也会使用 2000 多 k 内存）。假如我们再为 allocation2 分配内存会出现什么情况呢？
 
@@ -287,7 +287,7 @@ public class GCTest {
 allocation2 = new byte[900*1024];
 ```
 
-![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/java/images/20200831100949616.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/jvm/images/20200831100949616.png)
 
 **简单解释一下为什么会出现这种情况：** 因为给 allocation2 分配内存的时候 eden 区内存几乎已经被分配完了，我们刚刚讲了当 Eden 区没有足够空间进行分配时，虚拟机将发起一次 Minor GC.GC 期间虚拟机又发现 allocation1 无法存入 Survivor 空间，所以只好通过 **分配担保机制** 把新生代的对象提前转移到老年代中去，老年代上的空间足够存放 allocation1，所以不会出现 Full GC。执行 Minor GC 后，后面分配的对象如果能够存在 eden 区的话，还是会在 eden 区分配内存。可以执行如下代码验证：
 

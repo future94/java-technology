@@ -64,9 +64,7 @@ acks 的默认值即为1，代表我们的消息被leader副本接收之后就�
 
 > 设置 `min.insync.replicas >= 2`
 
-一般情况下我们还需要设置 min.insync.replicas >= 2 ，这样配置代表消息至少要被写入到 2 个副本才算是被成功发送。min.insync.replicas 的默认值为 1 ，在实际生产中应尽量避免默认值 1。
-
-<font color="red">注意</font> ：为了保证整个 Kafka 服务的高可用性，你需要确保 replication.factor > min.insync.replicas 。为什么呢？设想一下假如两者相等的话，只要是有一个副本挂掉，整个分区就无法正常工作了。这明显违反高可用性！一般推荐设置成 `replication.factor = min.insync.replicas + 1`.
+一般情况下我们还需要设置 min.insync.replicas >= 2 ，这样配置代表消息至少要被写入到 2 个副本才算是被成功发送。min.insync.replicas 的默认值为 1 ，I9
 
 > 设置 `unclean.leader.election.enable = false`
 

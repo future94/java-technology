@@ -21,7 +21,7 @@
 
 **上面所说如下图所示：**
 
-![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/java/images/20200820221225498.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/jvm/images/20200820221225498.png)
 
 ### 2.1 UseSerialGC（Serial + Serial Old的收集器组合进行内存回收）
 
@@ -64,7 +64,7 @@ Heap
 
 发生了一次Minor GC，触发的条件是Allocation Failure，将新生代内存从7331k变成了403k，分配allocation1、allocation2、allocation3如下图所示：
 
-![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/java/images/20200824123821074.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/jvm/images/20200824123821074.png)
 
 Eden区可用空间为8192K(新生代10M * 8/10)，分配allocation1、allocation2、allocation3已经用去了6M，Eden区还剩2048K，新生代from区还剩1024K，所以分配allcation4时已经不够通了，进行一次Minor GC，由于allocation1、allocation2、allocation3引用依然存在，无法回收，Eden区的内存也无法放入Survivor区（可用内存只有from区的1M），所以JVM就启动了内存分配的担保机制，把这6MB的三个对象allocation1、allocation2、allocation3直接转移到了老年代。GC输入结果为tenured generation   total 10240K, used 6144K。
 
@@ -77,7 +77,7 @@ Eden区可用空间为8192K(新生代10M * 8/10)，分配allocation1、allocatio
 -Xms20M -Xmx20M -Xmn10M -XX:+PrintGCDetails -XX:SurvivorRatio=8 -XX:+UseParallelGC
 ```
 
-![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/java/images/20200824123950879-1.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/java-base/jvm/images/20200824123950879-1.png)
 
 **测试代码：**
 ```java

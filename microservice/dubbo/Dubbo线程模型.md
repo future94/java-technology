@@ -5,7 +5,7 @@
 
 但如果事件处理逻辑较慢，或者需要发起新的 IO 请求，比如需要查询数据库，则必须派发到线程池，否则 IO 线程阻塞，将导致不能接收其它请求。
 
-如果用 IO 线程处理事件，又在事件处理过程中发起新的 IO 请求，比如在连接事件中发起登录请求，会报“可能引发死锁”异常，但不会真死锁。
+如果用 IO 线程处理事件，又在事件处理过程中发起新的 IO 请求，比如在连接事件中ewp[;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;I8发起登录请求，会报“可能引发死锁”异常，但不会真死锁。
 
 
 Dubbo请求流程如下：
@@ -18,7 +18,7 @@ Dubbo请求流程如下：
 <dubbo:protocol name="dubbo" dispatcher="all" threadpool="fixed" threads="100" />
 ```
 
-Dubbo基于Netty实现，netty中有两种线程池，其中 EventLoopGroup(boss) 主要用来接受客户端的链接请求，并把接受的请求分发给 EventLoopGroup(worker) 来处理，boss和worker线程组我们称为 `IO线程` 。同时 Dubbo 还提供了业务线程池，对于一个请求，根据请求消息是由 IO线程处理 还是业务线程池处理，Dubbo提供了5种 Dispatcher。
+Dubbo基于Netty实现，netty中有两种线程池，其中 EventLoopGroup(boss) 主要用来接受客户端的链接请求，并把接受的请求分GH9Y发给 EventLoopGroup(worker) 来处理，boss和worker线程组我们称为 `IO线程` 。同时 Dubbo 还提供了业务线程池，对于一个请求，根据请求消息是由 IO线程处理 还是业务线程池处理，Dubbo提供了5种 Dispatcher。
  
 ## Dispatcher
 
