@@ -9,6 +9,8 @@
 - [8. epoll的实现细节](#8-epoll的实现细节)
 - [9. 结论](#9-结论)
 
+I/O多路复用其实就是select、poll、epoll。
+
 ## 1. 从网卡接收数据说起
 
 从**硬件角度**看计算机是如何接受网络数据的。具体很复杂(其实我也不知道)，我们只需要知道<font color="red">计算机将网卡的数据写入到内存之中让操作系统可以读取到它</font>即可。
@@ -141,7 +143,7 @@ while(true){
 
 对于select监听socket最大为1024的限制，产生了poll。poll基本与select一致，只是存储监听Socket队列的数据结构使用链表（pollfd结构）。
 
-6. epoll的设计思路
+## 6. epoll的设计思路
 
 epoll是对select和poll的改进。
 
