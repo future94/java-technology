@@ -8,8 +8,10 @@
 
 ### 1.2 同步方式
 
-- 全量同步：一般发生在slave初始化的时候，slave连接master，发送SYNC命令，master接收到SYNC命名后，开始执行BGSAVE命令生成RDB文件并使用缓冲区记录此后执行的所有写命令，主服务器BGSAVE执行完后，向所有从服务器发送快照文件，并在发送期间继续记录被执行的写命令，slave收到快照之后删除旧数据，执行快照中的数据命令，然后接收数据命令，提供服务。
-- 增量同步：slave初始化完成时候，master每执行完一个命令都会发送给slave进行同步，这个就是增量同步。
+- 全量同步：一般发生在slave初始化的时候，slave连接master，发送SYNC命令，master接收到SYNC命名后，开始执行BGSAVE命令生成RDB文件并使用缓冲区记录此后执行的所有写命令，主服务器BGSAVE执行完后，向所有从服务器发送快照文件，并在发送期间继续记录被执行的写命令，使用 `replication buffer` 记录 RDB 文件生成后的所有写操作。slave收到快照之后删除旧数据，执行快照中的数据命令，同步完rdb数据之后，master还会将刚才`replication buffer`中的数据发送到slave，slave执行完成后接收数据命令，提供服务。
+- 增量同步：
+    - slave初始化完成时候，master每执行完一个命令都会发送给slave进行同步。
+    - slave断线重新连接，slave通过psync发送一个ID和offset来进行增量同步。
 
 #### 问题点
 - 同步故障
@@ -25,6 +27,8 @@
     - 如果节点运行 id 不匹配(如主节点重启、运行 id 发送变化)，此时要执行全量复制，应该配合哨兵和集群解决.
     - 主从复制挤压缓冲区不足产生的问题(网络中断，部分复制无法满足)，可增大复制缓冲区( rel_backlog_size 参数).
 - 复制风暴
+
+更多可以查看文章[Redis 高可用篇：你管这叫主从架构数据同步原理？](https://mp.weixin.qq.com/s/j81A849iCe7B4FgT-TVeOA)
 
 ### 1.2 哨兵模式（sentinel）
 
@@ -115,6 +119,8 @@ slave的选举主要会评估slave的以下几个方面：
 
 如果一个redis的slave优先级配置为0，那么它将永远不会被选为master。但是它依然会从master哪里复制数据。
 
+更多可以查看文章[Redis 高可用篇：你管这叫 Sentinel 哨兵集群原理](https://mp.weixin.qq.com/s/m3j2WZdFas8fjLRsykGcBQ)
+
 ### 1.3 集群模式（Cluster）
 
 前提，至少3主3从才能形成Cluster集群。集群相当于主从复制和哨兵模式的合成版本。
@@ -131,6 +137,8 @@ slave的选举主要会评估slave的以下几个方面：
 Redis Cluster中保证集群高可用的思路和实现和Redis Sentinel如出一辙，就是cluster中的master挂了之后，选中其中的slave节点替换为master。动态扩容与缩减与[一致性Hash算法](../../algorithm/一致性Hash算法原理与实现.md)实现一致。
 
 Redis Cluster各个节点之间交换数据、通信所采用的一种协议，叫做[gossip协议](https://www.jianshu.com/p/8279d6fd65bb)。有兴趣可以点击查看。
+
+更多可以查看问文章[Redis 高可用篇：Cluster 集群能支撑的数据有多大？](https://mp.weixin.qq.com/s/qOF9hT_gDvkMH6HbaIvBwg)
 
 ## 2. 实战搭建
 
@@ -163,6 +171,8 @@ requirepass 123456
 
 redis-6389.conf
 ```conf
+slaveof 127.0.0.1 6379
+
 # Redis使用后台模式
 daemonize yes
 
@@ -181,6 +191,8 @@ masterauth 123456
 
 redis-6399.conf
 ```conf
+slaveof 127.0.0.1 6379
+
 # Redis使用后台模式
 daemonize yes
 
