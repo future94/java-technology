@@ -138,6 +138,11 @@ Redis Cluster中保证集群高可用的思路和实现和Redis Sentinel如出�
 
 Redis Cluster各个节点之间交换数据、通信所采用的一种协议，叫做[gossip协议](https://www.jianshu.com/p/8279d6fd65bb)。有兴趣可以点击查看。
 
+**重定向机制：**通过`moved`和 `ask` 机制。
+
+- moved ：如果查询的key不在连接的机器，那么就通过moved重定向到对应的机器上。更新本地缓存。
+- ask ：如果某个 slot 的数据比较多，部分迁移到新实例，还有一部分没有迁移。那么通过ask让其先到之前的机器上查询。不更新本地缓存。
+
 更多可以查看问文章[Redis 高可用篇：Cluster 集群能支撑的数据有多大？](https://mp.weixin.qq.com/s/qOF9hT_gDvkMH6HbaIvBwg)
 
 ## 2. 实战搭建
