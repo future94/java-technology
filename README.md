@@ -10,6 +10,9 @@
 *   [Paxos算法详解](algorithm/Paxos算法详解.md)
 *   [Raft算法详解](algorithm/Raft算法详解.md)
 *   [Zab协议详解.md](algorithm/Zab协议详解.md)
+*   [GeoHash算法.md](algorithm/GeoHash算法.md)
+*   [LRU算法.md](algorithm/LRU算法.md)
+*   [漏斗算法与令牌桶算法.md](algorithm/漏斗算法与令牌桶算法.md)
 
 ### 系统
 *   [IO多路复用及Epoll原理](os/IO多路复用及Epoll原理.md)
