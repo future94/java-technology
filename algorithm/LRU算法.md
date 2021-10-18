@@ -5,7 +5,7 @@
 
 下图演示 LRU 原理，假设内存只能容纳3个页大小，按照 7 0 1 2 0 3 0 4 的次序访问页。假设内存按照栈的方式来描述访问时间，在上面的，是最近访问的，在下面的是，最远时间访问的，LRU就是这样工作的。
 
-![image](v2-584ed398c35ba76250cfb2f01b20ec0c_1440w.jpg)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/v2-584ed398c35ba76250cfb2f01b20ec0c_1440w.jpg)
 
 核心思想一共就固定大小的内存，如果不够，就淘汰掉最后操作的数据。
 
@@ -15,9 +15,9 @@
 
 hash表 + 双向链表。这样可以满足获取和插入都在 O(1) 时间复杂度内。hash表操作为 O(1)，链表可以记录插入的顺序，让最先插入的数据被淘汰掉。如下图所示：
 
-![image](v2-09f037608b1b2de70b52d1312ef3b307_1440w.png)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/v2-09f037608b1b2de70b52d1312ef3b307_1440w.png)
 
-![image](1566782-20190713105655398-1688289084.jpg)
+![image](https://raw.githubusercontent.com/future94/java-technology/master/algorithm/images/1566782-20190713105655398-1688289084.jpg)
 
 ## 3. 实现代码
 
